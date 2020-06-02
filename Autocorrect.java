@@ -43,7 +43,7 @@ public class Autocorrect {
 
     /**
      * Input: "Hello, this is Ayaan" <br/>
-     * Output: ["Hello", ",", "this", "is", "Ayaan"]
+     * Output: ["Hello", "this", "is", "Ayaan"]
      */
     private void parse() {
         // Reset ArrayList
