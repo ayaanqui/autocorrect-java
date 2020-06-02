@@ -25,8 +25,6 @@ public class Autocorrect {
     public void suggest(String text) throws IOException {
         this.text = text;
         parse();
-
-        // Search for words
         search();
     }
 
@@ -52,7 +50,6 @@ public class Autocorrect {
 
         int start = 0;
         for (int i = 0; i < text.length(); i++) {
-
             for (char delim : delimeters) {
                 if (text.charAt(i) == delim) {
                     String sub = text.substring(start, i);
@@ -78,8 +75,14 @@ public class Autocorrect {
 
         invalidWords.forEach(invalidWord -> {
             ArrayList<String> possibleWordCombos = wordCombiantions(invalidWord.toLowerCase());
+
             if (!possibleWordCombos.isEmpty()) {
-                System.out.println("In place of " + invalidWord + " did you mean? " + possibleWordCombos + "\n");
+                System.out.print("In place of " + invalidWord + " did you mean ");
+                if (possibleWordCombos.size() == 1) {
+                    System.out.println(possibleWordCombos.get(0) + "?\n");
+                } else {
+                    System.out.println(possibleWordCombos + "\n");
+                }
             }
         });
     }
@@ -89,6 +92,7 @@ public class Autocorrect {
         for (int i = 0; i < word.length(); i++) {
             String start = word.substring(0, i);
             String end = word.substring(i + 1);
+
             for (char alphabet : alphabets) {
                 String combination = start + alphabet + end;
                 if (wordsTable.get(combination) != null)
