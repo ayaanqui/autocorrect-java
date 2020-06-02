@@ -6,7 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class Autocorrect {
-    private final char[] delimeters = new char[] { ' ', ',', '.', '(', ')', '"', '\'', '“', '”', '’', '!', ';' };
+    private final char[] delimeters = new char[] { ' ', ',', '.', '(', ')', '?', '"', '\'', '“', '”', '’', '-', '!',
+            ';' };
     private char[] alphabets = new char[26];
 
     private String text; // Holds the original text of the user
@@ -74,7 +75,28 @@ public class Autocorrect {
                 invalidWords.add(word);
         });
 
-        System.out.println("Invalid list of words: " + invalidWords);
+        invalidWords.forEach(invalidWord -> {
+            ArrayList<String> possibleWordCombos = wordCombiantions(invalidWord.toLowerCase());
+            if (possibleWordCombos.isEmpty()) {
+                System.out.println(invalidWord + " is not an identified word");
+            } else {
+                System.out.print("In palce of " + invalidWord + " did you mean? " + possibleWordCombos);
+            }
+        });
+    }
+
+    private ArrayList<String> wordCombiantions(String word) {
+        ArrayList<String> possibleWords = new ArrayList<>();
+        for (int i = 0; i < word.length(); i++) {
+            String start = word.substring(0, i);
+            String end = word.substring(i + 1);
+            for (char alphabet : alphabets) {
+                String combination = start + alphabet + end;
+                if (wordsMap.get(combination) != null)
+                    possibleWords.add(combination);
+            }
+        }
+        return possibleWords;
     }
 
     public static void main(String[] args) throws IOException {
