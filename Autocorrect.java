@@ -12,10 +12,10 @@ public class Autocorrect {
 
     private String text; // Holds the original text of the user
     private ArrayList<String> parsedText;
-    private HashMap<String, String> wordsMap;
+    private HashMap<String, String> wordsTable;
 
     public Autocorrect() throws IOException {
-        wordsMap = new HashMap<>();
+        wordsTable = new HashMap<>();
         // Load words into wordMap
         loadWords(new String[] { "words_alpha.txt", "words.txt", "words_english.txt" });
         // Initialize alphabets
@@ -35,10 +35,11 @@ public class Autocorrect {
             Scanner file = new Scanner(new File(wordFileName));
             while (file.hasNext()) {
                 String word = file.next().toLowerCase();
-                wordsMap.put(word, word);
+                wordsTable.put(word, word);
             }
             file.close();
         }
+        System.out.println("*Successfully loaded " + wordsTable.size() + " files.\n\n");
     }
 
     /**
@@ -71,16 +72,14 @@ public class Autocorrect {
     private void search() {
         ArrayList<String> invalidWords = new ArrayList<>();
         parsedText.forEach(word -> {
-            if (wordsMap.get(word.toLowerCase()) == null)
+            if (wordsTable.get(word.toLowerCase()) == null)
                 invalidWords.add(word);
         });
 
         invalidWords.forEach(invalidWord -> {
             ArrayList<String> possibleWordCombos = wordCombiantions(invalidWord.toLowerCase());
-            if (possibleWordCombos.isEmpty()) {
-                System.out.println(invalidWord + " is not an identified word");
-            } else {
-                System.out.print("In palce of " + invalidWord + " did you mean? " + possibleWordCombos);
+            if (!possibleWordCombos.isEmpty()) {
+                System.out.println("In place of " + invalidWord + " did you mean? " + possibleWordCombos + "\n");
             }
         });
     }
@@ -92,7 +91,7 @@ public class Autocorrect {
             String end = word.substring(i + 1);
             for (char alphabet : alphabets) {
                 String combination = start + alphabet + end;
-                if (wordsMap.get(combination) != null)
+                if (wordsTable.get(combination) != null)
                     possibleWords.add(combination);
             }
         }
