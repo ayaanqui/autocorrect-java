@@ -16,10 +16,10 @@ public class Autocorrect {
 
     public Autocorrect() throws IOException {
         wordsTable = new HashMap<>();
-        // Load words into wordMap
-        loadWords(new String[] { "words_alpha.txt", "words.txt", "words_english.txt" });
         // Initialize alphabets
         IntStream.range(0, 26).forEach(i -> alphabets[i] = (char) ('a' + i));
+        // Load words into wordMap
+        loadWords(new String[] { "words_alpha.txt", "words.txt", "words_english.txt" });
     }
 
     public void suggest(String text) throws IOException {
@@ -37,7 +37,7 @@ public class Autocorrect {
             }
             file.close();
         }
-        System.out.println("*Successfully loaded " + wordsTable.size() + " files.\n\n");
+        System.out.printf("*Successfully loaded %d files.\n\n\n", wordsTable.size());
     }
 
     /**
@@ -77,11 +77,11 @@ public class Autocorrect {
             ArrayList<String> possibleWordCombos = wordCombiantions(invalidWord.toLowerCase());
 
             if (!possibleWordCombos.isEmpty()) {
-                System.out.print("In place of " + invalidWord + " did you mean ");
+                System.out.printf("In place of %s did you mean ", invalidWord);
                 if (possibleWordCombos.size() == 1) {
-                    System.out.println(possibleWordCombos.get(0) + "?\n");
+                    System.out.printf("%d?\n\n", possibleWordCombos.get(0));
                 } else {
-                    System.out.println(possibleWordCombos + "\n");
+                    System.out.printf("%d\n\n", possibleWordCombos);
                 }
             }
         });
